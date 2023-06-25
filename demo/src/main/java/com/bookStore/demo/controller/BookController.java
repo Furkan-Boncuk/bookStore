@@ -5,6 +5,7 @@ import com.bookStore.demo.entity.MyBookList;
 import com.bookStore.demo.service.BookService;
 import com.bookStore.demo.service.MyBookListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class BookController {
     public String bookRegister() {
         return "bookRegister";
     }
+
     @GetMapping("/available_books")
     public ModelAndView getAllBook() {
         List<Book> list = bookService.getAllBook();
@@ -59,16 +61,16 @@ public class BookController {
         return "redirect:/my_books";
     }
 
+    @RequestMapping("/editBook/{id}")
+    public String editBook(@PathVariable("id") int id, Model model) {
+        Book oldBook = bookService.getBookById(id);
+        model.addAttribute("newBook",oldBook);
+        return "bookEdit";
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    @RequestMapping("/deleteBook/{id}")
+    public String deleteBook(@PathVariable("id")int id) {
+        bookService.deleteById(id);
+        return "redirect:/available_books";
+    }
 }
